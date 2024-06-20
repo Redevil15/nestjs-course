@@ -21,13 +21,13 @@ export class TasksController {
     //     }
     // }
 
-    // @Post()
-    // @UsePipes(ValidationPipe)
-    // createTask(
-    //     @Body() createTaskDto: CreatetaskDto
-    // ): Task {
-    //     return this.tasksService.createTask(createTaskDto);
-    // }
+    @Post()
+    @UsePipes(ValidationPipe)
+    createTask(
+        @Body() createTaskDto: CreatetaskDto
+    ): Promise<Task> {
+        return this.tasksService.createTask(createTaskDto);
+    }
 
     @Get('/:id')
     getTaskById(
@@ -36,12 +36,12 @@ export class TasksController {
         return this.tasksService.getTaskById(id);
     }
 
-    // @Delete('/:id')
-    // deleteTask(
-    //     @Param('id') id: string
-    // ) {
-    //     this.tasksService.deleteTask(id);
-    // }
+    @Delete('/:id')
+    deleteTask(
+        @Param('id', ParseIntPipe) id: number
+    ): Promise<void> {
+        return this.tasksService.deleteTask(id);
+    }
 
     // @Patch('/:id/status')
     // updateTaskStatus(

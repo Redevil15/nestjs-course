@@ -5,6 +5,7 @@ import { filter } from 'rxjs';
 import { TaskRepository } from './task.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
+import { TaskStatus } from './task-status.enum';
 
 @Injectable()
 export class TasksService {
@@ -42,23 +43,22 @@ export class TasksService {
         return found;
     }
 
-    // createTask(createTaskDto: CreatetaskDto): Task {
-    //     const { title, description } = createTaskDto;
-    //     const task: Task = {
-    //         id: uuidv1(),
-    //         title,
-    //         description,
-    //         status: TaskStatus.OPEN
-    //     };
-
-    //     this.tasks.push(task);
-    //     return task;
-    // };
+    async createTask(createTaskDto: CreatetaskDto): Promise<Task> {
+        return this.taskRepository.createTask(createTaskDto);
+    }
 
     // deleteTask(id: string): void {
     //     const found = this.getTaskById(id);
     //     this.tasks = this.tasks.filter(task => task.id!== found.id);
     // }
+
+    async deleteTask(id: number): Promise<void> {
+        const result = await this.taskRepository.delete(id);
+        
+        if (result.affected === 0) {
+          throw new NotFoundException(`Task with ID "${id}" not found`);
+        }
+    }
    
     // updateTaskStatus(id: string, status: TaskStatus): Task {
     //     const task = this.getTaskById(id);
